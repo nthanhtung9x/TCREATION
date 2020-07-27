@@ -15,6 +15,8 @@ import ProfileComponent from './components/Profile';
 import { connect } from 'react-redux';
 import * as action from './redux/actions';
 import WOW from 'wow.js';
+import { BackTop } from 'antd';
+import { ArrowUpOutlined } from '@ant-design/icons';
 
 import {
   BrowserRouter as Router,
@@ -35,14 +37,25 @@ const App = ({ userLogin, checkUser, checkRole }) => {
         new WOW({
             live: false
         }).init();
-    },[]);
+	},[]);
+	
+	const style = {
+		height: 40,
+		width: 40,
+		lineHeight: '40px',
+		borderRadius: 4,
+		backgroundColor: '#22075e',
+		color: '#fff',
+		textAlign: 'center',
+		fontSize: 14,
+	  };
 
   return (
 	<Router>
 		<div>		
 			<Switch>
 				<Route path="/admin">
-					{ checkRole ? 
+					{ checkRole.managerSystem ? 
 							<AdminComponent/>
 						:
 							<>
@@ -107,6 +120,9 @@ const App = ({ userLogin, checkUser, checkRole }) => {
 					<h1>Page Not Found 404</h1>
 				</Router>
 			</Switch>
+			<BackTop style={{right:'50px'}}>
+				<div style={style}><ArrowUpOutlined /></div>
+			</BackTop>
 		</div>
 	</Router>
   );

@@ -9,10 +9,11 @@ import CourseItem from './CourseItem';
 import { connect } from 'react-redux';
 import * as action from '../../../redux/actions';
 import axios from 'axios';
+import {API} from '../../../API/api';
 
 const { Option } = Select;
 
-const ManagerCourses = ({ courses, createCourseAPI }) => {
+const ManagerCourses = ({ courses, createCourseAPI, checkRole }) => {
     // modal
     const [modalStyle, setModalStyle] = useState({
         visible: false,
@@ -25,7 +26,7 @@ const ManagerCourses = ({ courses, createCourseAPI }) => {
 
     const getTeacher = (token) => {
         return axios({
-            url:'https://courses-project-api.herokuapp.com/getTeacher',
+            url:`${API}/getTeacher`,
             method:'GET',
             headers: {
                 'Authorization': token,
@@ -172,9 +173,13 @@ const ManagerCourses = ({ courses, createCourseAPI }) => {
                         </Select>
                     </Col>
                     <Col span={6}>
-                        <Button type="primary" danger shape="round" icon={<AppstoreAddOutlined />} size="large" style={{width:'90%',marginLeft:'10%'}} onClick={showModalAddCourse}>
-                            THÊM KHÓA HỌC
-                        </Button>
+                        { checkRole.checkAddCourse ? 
+                            <Button type="primary" danger shape="round" icon={<AppstoreAddOutlined />} size="large" style={{width:'90%',marginLeft:'10%'}} onClick={showModalAddCourse}>
+                                THÊM KHÓA HỌC
+                            </Button>
+                        : 
+                            <></>
+                        }
                     </Col>
                 </Row>
                 <Row gutter ={[16,16]}>
@@ -297,7 +302,8 @@ const ManagerCourses = ({ courses, createCourseAPI }) => {
 
 const mapStateToProps = state => {
     return {
-        courses: state.courses
+        courses: state.courses,
+        checkRole: state.checkRole
     }
 }
 

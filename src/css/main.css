@@ -129,10 +129,12 @@ html {
           .header .nav .nav__list li .cart:hover::after, .header .nav .nav__list li .cart:hover::before {
             display: block; }
         .header .nav .nav__list li .user {
-          position: relative; }
+          position: relative;
+          min-width: 200px; }
           .header .nav .nav__list li .user .content {
             display: flex;
             align-items: center;
+            justify-content: space-around;
             margin: 0; }
             .header .nav .nav__list li .user .content i {
               color: #c5c5c5;

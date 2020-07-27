@@ -12,7 +12,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 
-const ManagerUsers = ({ users, handleCreateUser }) => {
+const ManagerUsers = ({ users, handleCreateUser, checkRole }) => {
 
     // modal add user
     const [modalStyle, setModalStyle] = useState({
@@ -107,9 +107,13 @@ const ManagerUsers = ({ users, handleCreateUser }) => {
                         <Search placeholder="Nhập tên người dùng cần tìm" onSearch={searchByName} enterButton size="large"/>
                     </Col>
                     <Col span={6}>
-                        <Button type="primary" danger shape="round" icon={<AppstoreAddOutlined />} size="large" style={{width:'90%',marginLeft:'10%'}} onClick={showModalAddUser}>
-                            THÊM HỌC VIÊN
-                        </Button>
+                        { checkRole.checkCreateUser ? 
+                                <Button type="primary" danger shape="round" icon={<AppstoreAddOutlined />} size="large" style={{width:'90%',marginLeft:'10%'}} onClick={showModalAddUser}>
+                                    THÊM HỌC VIÊN
+                                </Button>
+                            :
+                                <></>
+                        }
                     </Col>
                 </Row>
                 <Row>
@@ -259,7 +263,8 @@ const ManagerUsers = ({ users, handleCreateUser }) => {
 
 const mapStateToProps = state => {
     return {
-        users: state.users
+        users: state.users,
+        checkRole: state.checkRole
     }
 }
 

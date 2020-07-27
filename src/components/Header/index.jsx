@@ -147,7 +147,7 @@ const HeaderComponent = ({ userLogin, logOut, findUser, checkRole, getCourse, co
                                     <Link to={`/profile/${userLogin.id}`} onClick={() => {
                                         findUser(`${userLogin.id}`);
                                     }}>Thông tin cá nhân</Link>
-                                    {   checkRole ? 
+                                    {   checkRole.managerSystem ? 
                                             <Link to="/admin">Quản lý hệ thống</Link>
                                         :
                                             <></>

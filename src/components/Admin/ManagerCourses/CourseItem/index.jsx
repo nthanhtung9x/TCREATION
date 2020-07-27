@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import * as action from '../../../../redux/actions';
+import {API} from '../../../../API/api';
 
 import { Card, InputNumber } from 'antd';
 import { Button, Modal, Form, Input, List, message, Avatar, Spin, DatePicker, Popconfirm, Select } from 'antd';
@@ -15,7 +16,7 @@ const { Meta } = Card;
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
 
-const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
+const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse, checkRole }) => {
     // modal register
     const [modalRegisterStyle, setModalRegisterStyle] = useState({
         visibleRegister: false,
@@ -40,7 +41,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const getUserRegisterCourse = (token, id) => {
         return axios({
-            url: 'https://courses-project-api.herokuapp.com/registerCoursesList',
+            url: `${API}/registerCoursesList`,
             method: 'POST',
             headers: {
                 'Authorization': token,
@@ -56,7 +57,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const handleRegister = (token, idCourse, idUser) => {
         return axios({
-            url: 'https://courses-project-api.herokuapp.com/confirmRegister',
+            url: `${API}/confirmRegister`,
             method: 'POST',
             headers: {
                 'Authorization': token,
@@ -74,7 +75,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const handleRemoveRegister = (token, idCourse, idUser) => {
         return axios({
-            url:'https://courses-project-api.herokuapp.com/removeRegister',
+            url:`${API}/removeRegister`,
             method:'DELETE',
             headers: {
                 'Authorization': token,
@@ -169,7 +170,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const getUserRegistedCourse = (token, id) => {
         return axios({
-            url: 'https://courses-project-api.herokuapp.com/registedCoursesList',
+            url: `${API}/registedCoursesList`,
             method: 'POST',
             headers: {
                 'Authorization': token,
@@ -185,7 +186,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const handleCancelRegister = (token, idCourse, idUser) => {
         return axios({
-            url:'https://courses-project-api.herokuapp.com/cancelRegister',
+            url:`${API}/cancelRegister`,
             method:'PUT',
             headers: {
                 'Authorization': token,
@@ -223,7 +224,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const getTeacher = (token) => {
         return axios({
-            url:'https://courses-project-api.herokuapp.com/getTeacher',
+            url:`${API}/getTeacher`,
             method:'GET',
             headers: {
                 'Authorization': token,
@@ -329,7 +330,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
     const handleAddVideo = values => {
         console.log(values);
         axios({
-            url:"https://courses-project-api.herokuapp.com/addVideo",
+            url:`${API}/addVideo`,
             method:"POST",
             headers: {
                 'Authorization': JSON.parse(localStorage.getItem('token')).token,
@@ -369,7 +370,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
     const getVideo = (id) => {
         axios({
             method:'GET',
-            url: `https://courses-project-api.herokuapp.com/getVideo/${id}`,
+            url: `${API}/getVideo/${id}`,
             headers: {
                 'Authorization': JSON.parse(localStorage.getItem('token')).token,
                 "Content-Type": "application/json",
@@ -408,7 +409,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const handleUpdateVideo = values => {
         axios({
-            url:"https://courses-project-api.herokuapp.com/updateVideo",
+            url:`${API}/updateVideo`,
             method:"PUT",
             headers: {
                 'Authorization': JSON.parse(localStorage.getItem('token')).token,
@@ -467,7 +468,7 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
 
     const handleDeleteVideo = values => {
         axios({
-            url:"https://courses-project-api.herokuapp.com/deleteVideo",
+            url:`${API}/deleteVideo`,
             method:"DELETE",
             headers: {
                 'Authorization': JSON.parse(localStorage.getItem('token')).token,
@@ -520,66 +521,67 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
                 >
                     Ghi Danh
                 </button>
-                <button 
-                    className="btn-feature"
-                    className="btn-feature" 
-                    style={{
-                        backgroundColor:'#eb2f96',
-                        color:'#fff'
-                    }}    
-                    onClick={() => showModalListUser(item)}
-                >
-                    Học Viên
-                </button>
-                <button 
-                    className="btn-feature"
-                    style={{
-                        backgroundColor:'#531dab',
-                        color:'#fff'
-                    }}    
-                    onClick={() => showModalUpdateCourse(item)}
-                >
-                    Chỉnh Sửa
-                </button>
-                {/* confirm delete course */}
-                <Popconfirm
-                    title="Bạn chắc chắn muốn xóa khóa học này?"
-                    onConfirm={() => confirm(item)}
-                    onCancel={cancel}
-                    okText="Có"
-                    cancelText="Thoát"
-                >
-                    <button 
-                        className="btn-feature"
-                        style={{
-                            backgroundColor:'#f5222d',
-                            color:'#fff'
-                        }}    
-                    >
-                        Xóa
-                    </button>
-                </Popconfirm>
-                <button 
-                    className="btn-feature"
-                    style={{
-                        backgroundColor:'#1890ff',
-                        color:'#fff'
-                    }}    
-                    onClick={() => showModalAddVideo(item)}
-                >
-                    Thêm Video
-                </button>
-                <button 
-                    className="btn-feature"
-                    style={{
-                        backgroundColor:'#d4b106',
-                        color:'#fff'
-                    }}    
-                    onClick={() => showModalUpdateVideo(item)}
-                >
-                    Chỉnh sửa Video
-                </button>
-                <button 
+                {   checkRole.checkUpdateCourse ? 
+                        <>
+                            <button 
+                                className="btn-feature"
+                                className="btn-feature" 
+                                style={{
+                                    backgroundColor:'#eb2f96',
+                                    color:'#fff'
+                                }}    
+                                onClick={() => showModalListUser(item)}
+                            >
+                                Học Viên
+                            </button>
+                            <button 
+                                className="btn-feature"
+                                style={{
+                                    backgroundColor:'#531dab',
+                                    color:'#fff'
+                                }}    
+                                onClick={() => showModalUpdateCourse(item)}
+                            >
+                                Chỉnh Sửa
+                            </button>
+                            <Popconfirm
+                                title="Bạn chắc chắn muốn xóa khóa học này?"
+                                onConfirm={() => confirm(item)}
+                                onCancel={cancel}
+                                okText="Có"
+                                cancelText="Thoát"
+                            >
+                                <button 
+                                    className="btn-feature"
+                                    style={{
+                                        backgroundColor:'#f5222d',
+                                        color:'#fff'
+                                    }}    
+                                >
+                                    Xóa
+                                </button>
+                            </Popconfirm>
+                            <button 
+                                className="btn-feature"
+                                style={{
+                                    backgroundColor:'#1890ff',
+                                    color:'#fff'
+                                }}    
+                                onClick={() => showModalAddVideo(item)}
+                            >
+                                Thêm Video
+                            </button>
+                            <button 
+                                className="btn-feature"
+                                style={{
+                                    backgroundColor:'#d4b106',
+                                    color:'#fff'
+                                }}    
+                                onClick={() => showModalUpdateVideo(item)}
+                            >
+                                Chỉnh sửa Video
+                            </button>
+                            <button 
                     className="btn-feature"
                     style={{
                         backgroundColor:'#faad14',
@@ -589,6 +591,10 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
                 >
                     Xóa Video
                 </button>
+                        </>
+                    :
+                        <></>
+                }
             </div>
 
             {/* modal register */}
@@ -1025,6 +1031,12 @@ const CourseItem = ({ item, handleUpdateCourse, handleDeleteCourse }) => {
     )
 }
 
+const mapStateToProps = state => {
+    return {
+        checkRole: state.checkRole
+    }
+}
+
 const mapDispatchToProps = (dispatch, props) => {
     return {
         handleUpdateCourse: (token, data) => {
@@ -1036,4 +1048,4 @@ const mapDispatchToProps = (dispatch, props) => {
     }
 }
 
-export default connect(null,mapDispatchToProps)(CourseItem);
+export default connect(mapStateToProps,mapDispatchToProps)(CourseItem);

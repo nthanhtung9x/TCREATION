@@ -12,6 +12,7 @@ import { Layout, Menu, Avatar } from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
+  TeamOutlined
 } from '@ant-design/icons';
 import { 
     BrowserRouter as Router,
@@ -67,8 +68,9 @@ const AdminComponent = ({ userLogin, getUsers, getCourses, users, courses }) => 
                                 <Link to="/admin/courses">
                                     Quản lý khóa học
                                 </Link>
+                                
                             </Menu.Item>
-                            <Menu.Item key="/admin/users" icon={<DesktopOutlined />}>
+                            <Menu.Item key="/admin/users" icon={<TeamOutlined />}>
                                 <Link to="/admin/users">
                                     Quản lý người dùng
                                 </Link>

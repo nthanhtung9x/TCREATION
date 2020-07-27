@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react';
-import { Row, Col, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, message, Modal  } from 'antd';
 import CourseItem from '../CourseItem';
 
 import { connect } from 'react-redux';
 import * as action from '../../redux/actions';
 
 import { SmallDashOutlined } from '@ant-design/icons';
-import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 
-
-const DetailCourse = ({ detailCourse, getFindCourseById, match, userLogin, actionRegisterCourse, registerCourse }) => {
+const DetailCourse = ({ detailCourse, getFindCourseById, match, userLogin, actionRegisterCourse, registerCourse, setDefaultRegisterCourse }) => {
     const successRegister =() => {
         message.success('Ghi danh thành công, chờ xét duyệt !');
     }
@@ -18,25 +16,39 @@ const DetailCourse = ({ detailCourse, getFindCourseById, match, userLogin, actio
         message.error('Bạn đã ghi danh khóa học này');
     }
     useEffect(() => {
+        setDefaultRegisterCourse();
         getFindCourseById(match.params.id);
-        console.log('detail');
+        setVisible(false);
     },[]);
 
-    useEffect(() => {
-        if(registerCourse === false) {
-            errorRegister();
-        }  else if(registerCourse) {
-            successRegister();
-        }
-    },[registerCourse]);
+    // useEffect(() => {
+        
+    // },[registerCourse]);
 
     const handleRegisterCourse = async(data) => {
-        await actionRegisterCourse(JSON.parse(localStorage.getItem('token')).token,data);
-        // if(registerCourse === false) {
-        //     return errorRegister();;
-        // }
-        // return successRegister();
+        if(userLogin.username) {
+            await actionRegisterCourse(JSON.parse(localStorage.getItem('token')).token,data);
+            if(registerCourse === false) {
+                await errorRegister();
+            }  else if(registerCourse) {
+                await successRegister();
+                
+            }
+        } else {
+            showModal();
+        }
     }
+
+    const [visible, setVisible] = useState(false);
+    const history = useHistory();
+    
+    const showModal = async() => {
+        setVisible(true);
+    };
+    
+    const hideModal = () => {
+        setVisible(false);
+    };
 
     return (
         <>
@@ -154,6 +166,19 @@ const DetailCourse = ({ detailCourse, getFindCourseById, match, userLogin, actio
                     :
                         <h1 style={{marginTop:'120px'}}>Không tìm thấy</h1>
             }
+            <Modal
+                title="TCREATION"
+                visible={visible}
+                onOk={async() => {
+                    await setVisible(false);
+                    await history.push('/signin');
+                }}
+                onCancel={hideModal}
+                okText="Đăng nhập"
+                cancelText="Thoát"
+            >
+                <p style={{textAlign:'center'}}>Vui lòng đăng nhập để ghi danh khóa học</p>
+            </Modal>
         </>
            
     )
@@ -174,6 +199,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         actionRegisterCourse: (token, data) => {
             dispatch(action.registerCourseAPI(token,data));
+        },
+        setDefaultRegisterCourse: () => {
+            dispatch(action.setDefaultRegisterCourse());
         }
     }
 }

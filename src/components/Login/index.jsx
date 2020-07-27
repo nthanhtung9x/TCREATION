@@ -6,6 +6,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions/index';
 import axios from 'axios';
+import {API} from '../../API/api';
 
 const LoginComponent = ({handleLogin}) => {
     const successLogin = () => {
@@ -19,7 +20,7 @@ const LoginComponent = ({handleLogin}) => {
     const onFinish = values => {
         axios({
             method:"POST",
-            url:'https://courses-project-api.herokuapp.com/signin',
+            url:`${API}/signin`,
             headers: {
                 "Content-Type": "application/json",
             },

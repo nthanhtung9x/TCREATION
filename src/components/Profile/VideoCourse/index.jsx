@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { List, Avatar, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import {API} from '../../../API/api';
 
 const VideoCourse = ({ match }) => {
 
@@ -20,7 +21,7 @@ const VideoCourse = ({ match }) => {
         let id = match.params.id;
         axios({
             method:'GET',
-            url:`https://courses-project-api.herokuapp.com/getVideoCourse/${id}`,
+            url:`${API}/getVideoCourse/${id}`,
             headers: {
                 'Authorization': JSON.parse(localStorage.getItem('token')).token,
                 "Content-Type": "application/json",

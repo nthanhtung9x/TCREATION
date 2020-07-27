@@ -134,9 +134,11 @@
                 }
                 .user {
                     position: relative;
+                    min-width: 200px;
                     .content {
                         display:flex;
                         align-items: center;
+                        justify-content: space-around;
                         margin: 0;
                         i {
                             @include setText(getColor('grey'),getFontSize('size-16'),getFontWeight('medium'));

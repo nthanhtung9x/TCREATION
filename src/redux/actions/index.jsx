@@ -1,13 +1,13 @@
 import * as types from './actionType';
 import axios from 'axios';
-
+import {API} from '../../API/api';
 
 // Users 
 export const checkUser = (token) => {
     return (dispatch) => {
         return axios({
             method:'GET',
-            url:'https://courses-project-api.herokuapp.com/checkUser',
+            url:`${API}/checkUser`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const findUserById = (id) => {
     return (dispatch) => {
         return axios({
             method:'GET',
-            url:`https://courses-project-api.herokuapp.com/profile/${id}`,
+            url:`${API}/profile/${id}`,
             headers: {
                 "Content-Type": "application/json",
             }
@@ -64,7 +64,7 @@ export const getUsersAPI = (token) => {
     return (dispatch) => {
         return axios({
             method:'GET',
-            url:'https://courses-project-api.herokuapp.com/users',
+            url:`${API}/users`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export const updateUserAPI = (token, data) => {
     return (dispatch) => {
         return axios({
             method:'PUT',
-            url:'https://courses-project-api.herokuapp.com/updateUser',
+            url:`${API}/updateUser`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -108,7 +108,7 @@ export const deleteUserAPI = (token, data) => {
     return (dispatch) => {
         return axios({
             method:'DELETE',
-            url:'https://courses-project-api.herokuapp.com/deleteUser',
+            url:`${API}/deleteUser`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export const createUserAPI = (token, data) => {
     return (dispatch) => {
         return axios({
             method:"POST",
-            url:'https://courses-project-api.herokuapp.com/createUser',
+            url:`${API}/createUser`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -150,7 +150,7 @@ export const getCoursesAPI = () => {
     return (dispatch) => {
         return axios({
             method:'GET',
-            url:'https://courses-project-api.herokuapp.com/courses'
+            url:`${API}/courses`
         }). then(res => {
             dispatch(getCourses(res.data));
         }).catch(err => console.log(err));
@@ -167,7 +167,7 @@ export const findCourseById = (id) => {
     return (dispatch) => {
         return axios({
             method:'GET',
-            url:`https://courses-project-api.herokuapp.com/course/detail/${id}`,
+            url:`${API}/course/detail/${id}`,
             headers: {
                 "Content-Type": "application/json",
             }
@@ -188,7 +188,7 @@ export const registerCourseAPI = (token,data) => {
     return (dispatch) => {
         return axios({
             method:'POST',
-            url:'https://courses-project-api.herokuapp.com/registerCourses',
+            url:`${API}/registerCourses`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -205,11 +205,16 @@ export const loadingUsersAfterRegisterCourse = (message) => {
         message
     }
 }
+export const setDefaultRegisterCourse = () => {
+    return {
+        type:types.DEFAULT_REGISTER_COURSE
+    }
+}
 
 export const createCourseAPI = (token,data) => {
     return (dispatch) => {
         return axios({
-            url:'https://courses-project-api.herokuapp.com/createCourse',
+            url:`${API}/createCourse`,
             method:'POST',
             headers: {
                 'Authorization': token,
@@ -232,7 +237,7 @@ export const updateCourseAPI = (token, data) => {
     return (dispatch) => {
         return axios({
             method:"PUT",
-            url:'https://courses-project-api.herokuapp.com/updateCourse',
+            url:`${API}/updateCourse`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -254,7 +259,7 @@ export const deleteCourseAPI = (token, id) => {
     return (dispatch) => {
         return axios({
             method:"DELETE",
-            url:'https://courses-project-api.herokuapp.com/deleteCourse',
+            url:`${API}/deleteCourse`,
             headers: {
                 'Authorization': token,
                 "Content-Type": "application/json",
@@ -275,7 +280,7 @@ export const loadingCourseAfterDelete = (courses) => {
 export const getCoursesOfUserAPI = (token) => {
     return (dispatch) => {
         return axios({
-            url:'https://courses-project-api.herokuapp.com/getCoursesOfUser',
+            url:`${API}/getCoursesOfUser`,
             method:'GET',
             headers: {
                 'Authorization': token,
